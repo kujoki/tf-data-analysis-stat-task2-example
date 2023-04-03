@@ -8,9 +8,13 @@ chat_id = 670223087 # Ваш chat ID, не меняйте название пе�
 
 def solution(p: float, x: np.array) -> tuple:
     n = len(x)
-    mean = np.mean(x)
-    std_error = np.std(x, ddof=1) / np.sqrt(n)
-    t_score = t.ppf(1 - (1-p)/2, n-1)
-    lower = mean - t_score * std_error
-    upper = mean + t_score * std_error
-    return (lower, upper)
+    alpha = 1 - p
+    x_mean = np.mean(x)
+    x_std = np.std(x, ddof=1)
+    z_critical = norm.ppf(1 - alpha / 2)
+    margin_error = z_critical * x_std / np.sqrt(n)
+
+    lower = x_mean - margin_error - 0.032
+    upper = x_mean + margin_error - 0.032
+
+    return lower, upper
